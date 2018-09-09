@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Calc</string>
+
+    <string name="expression">0</string>
+    <string name="result">0</string>
+
+    <string name="sqrt">sqrt</string>
+    <string name="log">log</string>
+    <string name="pow">^</string>
+    <string name="backspace">C</string>
+    <string name="division">÷</string>
+    <string name="multiplication">x</string>
+    <string name="addition">+</string>
+    <string name="subtraction">-</string>
+    <string name="confirm">=</string>
+    <string name="dot">.</string>
 </resources>
