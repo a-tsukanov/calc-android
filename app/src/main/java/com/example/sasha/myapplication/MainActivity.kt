@@ -4,6 +4,8 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import java.time.Duration
 
 import kotlin.math.sqrt
 import kotlin.math.log
@@ -66,11 +68,22 @@ class MainActivity : Activity() {
         addOperatorsHandlers()
 
         fun addConfirmHandler() {
+
             val confirm = findViewById<Button>(R.id.btnConfirm)
             confirm.setOnClickListener {
-                updateResultView(result, expression)
-                expression.editingState = Expression.EditingState.GOT_RESULTS
+                try {
+                    updateResultView(result, expression)
+                    expression.editingState = Expression.EditingState.GOT_RESULTS
+                } catch (e: ArithmeticException) {
+
+                    Toast
+                            .makeText(this, "Cannot divide by zero", Toast.LENGTH_LONG)
+                            .show()
+
+                }
             }
+
+
         }
         addConfirmHandler()
 
@@ -102,12 +115,13 @@ class MainActivity : Activity() {
 
         fun addUnaryFuncsHandlers() {
             val unaryFuncs = mapOf<Button, (Double) -> Double>(
-                    Pair(findViewById(R.id.btnSqrt), {i -> sqrt(i)}),
-                    Pair(findViewById(R.id.btnLog), {i -> log(i, kotlin.math.E)})
+                    Pair(findViewById(R.id.btnSqrt), { i -> sqrt(i) }),
+                    Pair(findViewById(R.id.btnLog), { i -> log(i, kotlin.math.E) })
             )
             unaryFuncs.map {
                 val (btn, func) = it
                 btn.setOnClickListener {
+
                     val evaluated = expression.evaluate().toDouble()
                     expression.expression = func(evaluated).toString()
                     updateInputView(input, expression)
