@@ -2,7 +2,6 @@ package com.example.sasha.myapplication
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 
@@ -21,9 +20,9 @@ class MainActivity : Activity() {
                 findViewById<Button>(resources.getIdentifier("btn$it", "id", packageName))
             }
 
-            numberButtons.forEachIndexed {
-                i, btn -> btn.setOnClickListener {
-                    if(expression.editingState == Expression.EditingState.GOT_RESULTS) {
+            numberButtons.forEachIndexed { i, btn ->
+                btn.setOnClickListener {
+                    if (expression.editingState == Expression.EditingState.GOT_RESULTS) {
                         expression = Expression()
                     }
                     expression.append(i)
@@ -38,13 +37,14 @@ class MainActivity : Activity() {
                     Pair(findViewById(R.id.btnAdd), '+'),
                     Pair(findViewById(R.id.btnSubstract), '-'),
                     Pair(findViewById(R.id.btnDivide), '÷'),
-                    Pair(findViewById(R.id.btnMultiply), 'x')
+                    Pair(findViewById(R.id.btnMultiply), 'x'),
+                    Pair(findViewById(R.id.btnPow), '^')
             )
 
             binaryOperators.map {
                 val (btn, operator) = it
                 btn.setOnClickListener {
-                    when(expression.editingState) {
+                    when (expression.editingState) {
                         Expression.EditingState.GOT_RESULTS -> {
                             expression.expression = expression.evaluate().toString()
                         }
@@ -77,16 +77,25 @@ class MainActivity : Activity() {
                 if (expression.editingState == Expression.EditingState.GOT_RESULTS)
                     expression = Expression()
                 expression.eraseLast()
-                if(!expression.containsOperator)
-                    // User has erased the operator from the expression in the input field
+                if (!expression.containsOperator)
+                // User has erased the operator from the expression in the input field
                     expression.editingState = Expression.EditingState.LEFT_OPERATOR
-                if(expression.expression.isEmpty())
-                    // User has erased the only character from the input
+                if (expression.expression.isEmpty())
+                // User has erased the only character from the input
                     expression.expression = "0"
                 updateInputView(input, expression)
             }
         }
         addEraseHandler()
+
+        fun addDotHandler() {
+            val dot = findViewById<Button>(R.id.btnDot)
+            dot.setOnClickListener {
+                expression.append('.')
+                updateInputView(input, expression)
+            }
+        }
+        addDotHandler()
 
     }
 
@@ -97,7 +106,6 @@ class MainActivity : Activity() {
     private fun updateResultView(resultView: TextView, expression: Expression) {
         resultView.text = expression.evaluate().toString()
     }
-
 
 
 }
