@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 
+import kotlin.math.sqrt
+import kotlin.math.log
+
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +51,7 @@ class MainActivity : Activity() {
                         Expression.EditingState.GOT_RESULTS -> {
                             expression.expression = expression.evaluate().toString()
                         }
-                        Expression.EditingState.RIGHT_OPERATOR -> {
+                        Expression.EditingState.RIGHT_OPERAND -> {
                             updateResultView(result, expression)
                             expression.expression = expression.evaluate().toString()
                         }
@@ -56,7 +59,7 @@ class MainActivity : Activity() {
                     }
                     expression.append(operator)
                     updateInputView(input, expression)
-                    expression.editingState = Expression.EditingState.RIGHT_OPERATOR
+                    expression.editingState = Expression.EditingState.RIGHT_OPERAND
                 }
             }
         }
@@ -79,7 +82,7 @@ class MainActivity : Activity() {
                 expression.eraseLast()
                 if (!expression.containsOperator)
                 // User has erased the operator from the expression in the input field
-                    expression.editingState = Expression.EditingState.LEFT_OPERATOR
+                    expression.editingState = Expression.EditingState.LEFT_OPERAND
                 if (expression.expression.isEmpty())
                 // User has erased the only character from the input
                     expression.expression = "0"
@@ -96,6 +99,24 @@ class MainActivity : Activity() {
             }
         }
         addDotHandler()
+
+        fun addUnaryFuncsHandlers() {
+            val unaryFuncs = mapOf<Button, (Double) -> Double>(
+                    Pair(findViewById(R.id.btnSqrt), {i -> sqrt(i)}),
+                    Pair(findViewById(R.id.btnLog), {i -> log(i, kotlin.math.E)})
+            )
+            unaryFuncs.map {
+                val (btn, func) = it
+                btn.setOnClickListener {
+                    val evaluated = expression.evaluate().toDouble()
+                    expression.expression = func(evaluated).toString()
+                    updateInputView(input, expression)
+                    result.text = expression.expression
+                    expression.editingState = Expression.EditingState.GOT_RESULTS
+                }
+            }
+        }
+        addUnaryFuncsHandlers()
 
     }
 
