@@ -2,37 +2,51 @@ package com.example.sasha.myapplication
 
 import org.mariuszgromada.math.mxparser.*
 
-class CalculatorExpression() : Expression() {
+class CalculatorExpression : Expression() {
 
     init {
-        expressionString = "0"
+        expressionString = ZERO_STRING
     }
 
-    fun append(c: Char): Unit {
+    val PARSEABLE_DIVIDE = '/'
+    val PARSEABLE_MULTIPLY = '*'
+
+    fun append(c: Char, overrideFirstZero: Boolean = true): Unit {
         expressionString =
-                if (expressionString == "0")
+                if (expressionString == ZERO_STRING && overrideFirstZero)
                     "${c}"
                 else
                     "${expressionString}${c}"
     }
 
-    fun append(n: Int): Unit {
-        append(n.toString().single())
+    fun append(n: Int, overrideFirstZero: Boolean = true): Unit {
+        append(n.toString().single(), overrideFirstZero)
+    }
+
+    fun append(s: String, overrideFirstZero: Boolean): Unit {
+        s.iterator().forEach { append(it, overrideFirstZero) }
     }
 
     fun removeLast(): Unit {
+        var numCharsToRemove = 1
+        for (f in UnaryFunctions.all) {
+            if (expressionString.endsWith("${f}${Parenthesis.OPENING}")) numCharsToRemove = f.length + 1
+        }
+
         expressionString =
-                if (expressionString.length == 1)
+                if (expressionString.length == numCharsToRemove)
                     "0"
                 else
-                    expressionString.slice(0 until expressionString.length - 1)
+                    expressionString.slice(
+                            0 until expressionString.length - numCharsToRemove
+                    )
     }
 
     override fun calculate(): Double {
         val operatorsCorrected = Expression(expressionString)
         var toCorrect = operatorsCorrected.expressionString
-        toCorrect = toCorrect.replace('÷', '/')
-        toCorrect = toCorrect.replace('x', '*')
+        toCorrect = toCorrect.replace(Operators.DIVIDE, PARSEABLE_DIVIDE)
+        toCorrect = toCorrect.replace(Operators.MULTIPLY, PARSEABLE_MULTIPLY)
         operatorsCorrected.expressionString = toCorrect
         return operatorsCorrected.calculate()
     }

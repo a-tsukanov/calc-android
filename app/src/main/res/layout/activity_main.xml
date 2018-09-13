@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="0dp"
+        android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
         android:text="@string/sqrt"
         android:textSize="18sp"
@@ -18,7 +19,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btnLog"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtResult"
+        app:layout_constraintTop_toBottomOf="@+id/btnSin"
         app:layout_constraintVertical_weight="1" />
 
     <Button
@@ -26,6 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="0dp"
+        android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
         android:text="@string/log"
         android:textSize="18sp"
@@ -33,7 +35,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btnPow"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnSqrt"
-        app:layout_constraintTop_toBottomOf="@+id/txtResult"
+        app:layout_constraintTop_toBottomOf="@+id/btnCos"
         app:layout_constraintVertical_weight="1" />
 
     <Button
@@ -41,6 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="0dp"
+        android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
         android:text="@string/pow"
         android:textSize="18sp"
@@ -48,7 +51,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btnDivide"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnLog"
-        app:layout_constraintTop_toBottomOf="@+id/txtResult"
+        app:layout_constraintTop_toBottomOf="@+id/btnLeftPar"
         app:layout_constraintVertical_weight="1" />
 
     <TextView
@@ -59,7 +62,9 @@
         android:text="@string/expression"
         android:textAlignment="viewEnd"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtResult"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,6 +77,7 @@
         android:textAlignment="viewEnd"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtExpr" />
 
@@ -80,6 +86,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="0dp"
+        android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
         android:text="@string/division"
         android:textSize="18sp"
@@ -87,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnPow"
-        app:layout_constraintTop_toBottomOf="@+id/txtResult"
+        app:layout_constraintTop_toBottomOf="@+id/btnRightPar"
         app:layout_constraintVertical_weight="1" />
 
     <Button
@@ -332,5 +339,61 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnDot"
         app:layout_constraintTop_toBottomOf="@+id/btnAdd"
+        app:layout_constraintVertical_weight="1" />
+
+    <Button
+        android:id="@+id/btnSin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:text="sin"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSqrt"
+        app:layout_constraintEnd_toStartOf="@+id/btnCos"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtResult"
+        app:layout_constraintVertical_weight="1" />
+
+    <Button
+        android:id="@+id/btnCos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:text="cos"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnLog"
+        app:layout_constraintEnd_toStartOf="@+id/btnLeftPar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnSin"
+        app:layout_constraintTop_toBottomOf="@+id/txtResult"
+        app:layout_constraintVertical_weight="1" />
+
+    <Button
+        android:id="@+id/btnLeftPar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:text="("
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnPow"
+        app:layout_constraintEnd_toStartOf="@+id/btnRightPar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnCos"
+        app:layout_constraintTop_toBottomOf="@+id/txtResult"
+        app:layout_constraintVertical_weight="1" />
+
+    <Button
+        android:id="@+id/btnRightPar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:text=")"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnDivide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnLeftPar"
+        app:layout_constraintTop_toBottomOf="@+id/txtResult"
         app:layout_constraintVertical_weight="1" />
 </android.support.constraint.ConstraintLayout>

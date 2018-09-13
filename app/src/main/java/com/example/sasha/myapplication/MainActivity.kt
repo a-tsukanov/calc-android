@@ -1,13 +1,11 @@
 package com.example.sasha.myapplication
 
 import android.app.Activity
+import android.graphics.Path
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-
-import kotlin.math.sqrt
-import kotlin.math.log
 
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +28,7 @@ class MainActivity : Activity() {
         fun addNumbersHandlers() {
             val numberButtons = (0..9).map {
                 findViewById<Button>(resources.getIdentifier(
-                        "btn$it", "id", packageName)
+                        "btn${it}", "id", packageName)
                 )
             }
 
@@ -45,17 +43,17 @@ class MainActivity : Activity() {
 
         fun addOperatorsHandlers() {
             val binaryOperators = mapOf<Button, Char>(
-                    Pair(findViewById(R.id.btnAdd), '+'),
-                    Pair(findViewById(R.id.btnSubstract), '-'),
-                    Pair(findViewById(R.id.btnDivide), '÷'),
-                    Pair(findViewById(R.id.btnMultiply), 'x'),
-                    Pair(findViewById(R.id.btnPow), '^')
+                    Pair(findViewById(R.id.btnAdd), Operators.PLUS),
+                    Pair(findViewById(R.id.btnSubstract), Operators.MINUS),
+                    Pair(findViewById(R.id.btnDivide), Operators.DIVIDE),
+                    Pair(findViewById(R.id.btnMultiply), Operators.MULTIPLY),
+                    Pair(findViewById(R.id.btnPow), Operators.EXPONENTIATE)
             )
 
             binaryOperators.map {
                 val (btn, operator) = it
                 btn.setOnClickListener {
-                    expression.append(operator)
+                    expression.append(operator, overrideFirstZero = false)
                     updateInputView(expression)
                 }
             }
@@ -63,7 +61,6 @@ class MainActivity : Activity() {
         addOperatorsHandlers()
 
         fun addConfirmHandler() {
-
             val confirm = findViewById<Button>(R.id.btnConfirm)
             confirm.setOnClickListener {
                 try {
@@ -92,21 +89,39 @@ class MainActivity : Activity() {
             val DOT = '.'
             val dot = findViewById<Button>(R.id.btnDot)
             dot.setOnClickListener {
-                expression.append(DOT)
+                expression.append(DOT, overrideFirstZero = false)
+                updateInputView(expression)
             }
         }
         addDotHandler()
 
+        fun addParenthesisHandler() {
+            val mapping = mapOf<Button, Char>(
+                    Pair(findViewById(R.id.btnLeftPar), Parenthesis.OPENING),
+                    Pair(findViewById(R.id.btnRightPar), Parenthesis.CLOSING)
+            )
+            mapping.map {
+                val (btn, c) = it
+                btn.setOnClickListener {
+                    expression.append(c)
+                    updateInputView(expression)
+                }
+            }
+        }
+        addParenthesisHandler()
+
         fun addUnaryFuncsHandlers() {
-            val unaryFuncs = mapOf<Button, (Double) -> Double>(
-                    Pair(findViewById(R.id.btnSqrt), { i -> sqrt(i) }),
-                    Pair(findViewById(R.id.btnLog), { i -> log(i, kotlin.math.E) })
+            val unaryFuncs = mapOf<Button, String>(
+                    Pair(findViewById(R.id.btnSqrt), UnaryFunctions.SQRT),
+                    Pair(findViewById(R.id.btnLog), UnaryFunctions.LOG),
+                    Pair(findViewById(R.id.btnSin), UnaryFunctions.SIN),
+                    Pair(findViewById(R.id.btnCos), UnaryFunctions.COS)
             )
             unaryFuncs.map {
                 val (btn, func) = it
                 btn.setOnClickListener {
-                    throw NotImplementedError()
-
+                    expression.append("${func}(", overrideFirstZero = true)
+                    updateInputView(expression)
                 }
             }
         }
