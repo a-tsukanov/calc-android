@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import java.time.Duration
 
 import kotlin.math.sqrt
 import kotlin.math.log
@@ -15,23 +14,30 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var expression = Expression()
+        val input: TextView = findViewById(R.id.txtExpr)
+        fun updateInputView(expression: CalculatorExpression) {
+            input.text = expression.toString()
+        }
 
-        val input = findViewById<TextView>(R.id.txtExpr)
-        val result = findViewById<TextView>(R.id.txtResult)
+
+        val result: TextView = findViewById(R.id.txtResult)
+        fun updateResultView(expression: CalculatorExpression) {
+            result.text = expression.calculate().toString()
+        }
+
+        val expression = CalculatorExpression()
 
         fun addNumbersHandlers() {
             val numberButtons = (0..9).map {
-                findViewById<Button>(resources.getIdentifier("btn$it", "id", packageName))
+                findViewById<Button>(resources.getIdentifier(
+                        "btn$it", "id", packageName)
+                )
             }
 
             numberButtons.forEachIndexed { i, btn ->
                 btn.setOnClickListener {
-                    if (expression.editingState == Expression.EditingState.GOT_RESULTS) {
-                        expression = Expression()
-                    }
                     expression.append(i)
-                    updateInputView(input, expression)
+                    updateInputView(expression)
                 }
             }
         }
@@ -49,19 +55,8 @@ class MainActivity : Activity() {
             binaryOperators.map {
                 val (btn, operator) = it
                 btn.setOnClickListener {
-                    when (expression.editingState) {
-                        Expression.EditingState.GOT_RESULTS -> {
-                            expression.expression = expression.evaluate().toString()
-                        }
-                        Expression.EditingState.RIGHT_OPERAND -> {
-                            updateResultView(result, expression)
-                            expression.expression = expression.evaluate().toString()
-                        }
-
-                    }
                     expression.append(operator)
-                    updateInputView(input, expression)
-                    expression.editingState = Expression.EditingState.RIGHT_OPERAND
+                    updateInputView(expression)
                 }
             }
         }
@@ -72,8 +67,7 @@ class MainActivity : Activity() {
             val confirm = findViewById<Button>(R.id.btnConfirm)
             confirm.setOnClickListener {
                 try {
-                    updateResultView(result, expression)
-                    expression.editingState = Expression.EditingState.GOT_RESULTS
+                    updateResultView(expression)
                 } catch (e: ArithmeticException) {
 
                     Toast
@@ -82,33 +76,23 @@ class MainActivity : Activity() {
 
                 }
             }
-
-
         }
         addConfirmHandler()
 
         fun addEraseHandler() {
             val erase = findViewById<Button>(R.id.btnErase)
             erase.setOnClickListener {
-                if (expression.editingState == Expression.EditingState.GOT_RESULTS)
-                    expression = Expression()
-                expression.eraseLast()
-                if (!expression.containsOperator)
-                // User has erased the operator from the expression in the input field
-                    expression.editingState = Expression.EditingState.LEFT_OPERAND
-                if (expression.expression.isEmpty())
-                // User has erased the only character from the input
-                    expression.expression = "0"
-                updateInputView(input, expression)
+                expression.removeLast()
+                updateInputView(expression)
             }
         }
         addEraseHandler()
 
         fun addDotHandler() {
+            val DOT = '.'
             val dot = findViewById<Button>(R.id.btnDot)
             dot.setOnClickListener {
-                expression.append('.')
-                updateInputView(input, expression)
+                expression.append(DOT)
             }
         }
         addDotHandler()
@@ -121,26 +105,12 @@ class MainActivity : Activity() {
             unaryFuncs.map {
                 val (btn, func) = it
                 btn.setOnClickListener {
+                    throw NotImplementedError()
 
-                    val evaluated = expression.evaluate().toDouble()
-                    expression.expression = func(evaluated).toString()
-                    updateInputView(input, expression)
-                    result.text = expression.expression
-                    expression.editingState = Expression.EditingState.GOT_RESULTS
                 }
             }
         }
         addUnaryFuncsHandlers()
 
     }
-
-    private fun updateInputView(inputView: TextView, expression: Expression) {
-        inputView.text = expression.toString()
-    }
-
-    private fun updateResultView(resultView: TextView, expression: Expression) {
-        resultView.text = expression.evaluate().toString()
-    }
-
-
 }
