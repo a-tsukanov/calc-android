@@ -1,7 +1,6 @@
 package com.example.sasha.myapplication
 
 import android.app.Activity
-import android.graphics.Path
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
