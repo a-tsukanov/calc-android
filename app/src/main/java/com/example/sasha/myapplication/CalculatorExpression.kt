@@ -2,6 +2,8 @@ package com.example.sasha.myapplication
 
 import org.mariuszgromada.math.mxparser.*
 
+class InvalidExpressionError: Error()
+
 class CalculatorExpression : Expression() {
 
     init {
@@ -42,13 +44,23 @@ class CalculatorExpression : Expression() {
                     )
     }
 
+    fun clear(): Unit {
+        expressionString = ZERO_STRING
+    }
+
     override fun calculate(): Double {
         val operatorsCorrected = Expression(expressionString)
         var toCorrect = operatorsCorrected.expressionString
         toCorrect = toCorrect.replace(Operators.DIVIDE, PARSEABLE_DIVIDE)
         toCorrect = toCorrect.replace(Operators.MULTIPLY, PARSEABLE_MULTIPLY)
         operatorsCorrected.expressionString = toCorrect
-        return operatorsCorrected.calculate()
+
+        val result = operatorsCorrected.calculate()
+        if (result.isNaN())
+            throw InvalidExpressionError()
+        else
+            return result
+
     }
 
     override fun toString(): String = expressionString

@@ -23,7 +23,7 @@ class UnaryFunctions {
     companion object {
         val SIN = "sin"
         val COS = "cos"
-        val LOG = "log"
+        val LOG = "ln"
         val SQRT = "sqrt"
 
         val all = listOf(SIN, COS, LOG, SQRT)

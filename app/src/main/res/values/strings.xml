@@ -5,7 +5,10 @@
     <string name="result">0</string>
 
     <string name="sqrt">sqrt</string>
-    <string name="log">log</string>
+    <string name="log">ln</string>
+    <string name="sin">sin</string>
+    <string name="cos">cos</string>
+
     <string name="pow">^</string>
     <string name="backspace">C</string>
     <string name="division">÷</string>
@@ -14,4 +17,7 @@
     <string name="subtraction">-</string>
     <string name="confirm">=</string>
     <string name="dot">.</string>
+
+    <string name="leftPar">(</string>
+    <string name="rightPar">)</string>
 </resources>

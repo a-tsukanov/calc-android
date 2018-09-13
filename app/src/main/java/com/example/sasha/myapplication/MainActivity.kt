@@ -64,10 +64,10 @@ class MainActivity : Activity() {
             confirm.setOnClickListener {
                 try {
                     updateResultView(expression)
-                } catch (e: ArithmeticException) {
+                } catch (e: InvalidExpressionError) {
 
                     Toast
-                            .makeText(this, "Cannot divide by zero", Toast.LENGTH_LONG)
+                            .makeText(this, "Please check your expression", Toast.LENGTH_LONG)
                             .show()
 
                 }
@@ -80,6 +80,12 @@ class MainActivity : Activity() {
             erase.setOnClickListener {
                 expression.removeLast()
                 updateInputView(expression)
+            }
+            erase.setOnLongClickListener {
+                expression.clear()
+                updateInputView(expression)
+                updateResultView(expression)
+                return@setOnLongClickListener true
             }
         }
         addEraseHandler()
